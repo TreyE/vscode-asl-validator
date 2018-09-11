@@ -3,6 +3,7 @@ import { Validator } from './validator';
 import { ValidationResult, ValidationError } from "./validation_errors";
 import { getLanguageService, LanguageServiceParams } from "vscode-json-languageservice";
 import { TextDocumentAdapter, mapJsonDiagnostic } from './json_language_service/service_adapters'
+import { uniqWith } from "lodash";
 
 const languageServiceConfig : LanguageServiceParams = {
 };
@@ -56,7 +57,9 @@ export class ValidationRunner {
     vscode.commands.executeCommand("workbench.action.problems.focus").then(() => {
       var dc = vscode.languages.createDiagnosticCollection("Invalid Workflow");
       dc.set(uri,
-        results.errors.map(ValidationRunner.diagnosticFromValidationError)
+        ValidationRunner.filterValidationErrors(results.errors).map((ve) => {
+          return ValidationRunner.diagnosticFromValidationError(ve)
+        })
       )
     });
   }
@@ -70,5 +73,24 @@ export class ValidationRunner {
     );
     diag.code = err.error;
     return diag;
+  }
+
+  private static filterValidationErrors(inErrs: Array<ValidationError>) : Array<ValidationError> {
+    return uniqWith(inErrs, ValidationRunner.compareValidationErrors);
+  }
+
+  private static compareValidationErrors(currentVE : ValidationError, otherVE: ValidationError) : boolean {
+    if (!(currentVE.message === otherVE.message)) {
+      return false;
+    }
+    if (currentVE.sourceLocation) {
+      if (otherVE.sourceLocation) {
+        return currentVE.sourceLocation.isEqual(otherVE.sourceLocation);
+      } else {
+        return false;
+      }
+    } else {
+      return !!otherVE.sourceLocation;
+    }
   }
 }

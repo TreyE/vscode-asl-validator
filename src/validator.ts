@@ -1,7 +1,6 @@
-import { ValidatorFunction } from "./asl_validator/validator_types"
+import { validator as aslValidator } from "./asl_validator/validator";
 import { mapNoJSONProvided, ValidationResult, mapResult } from './validation_errors';
-
-var aslValidator : ValidatorFunction  = require('asl-validator');
+import { parse as parseSourceMap } from "json-source-map"
 
 export class Validator {
   static validate(source: string | null) : ValidationResult {
@@ -9,6 +8,7 @@ export class Validator {
       return mapNoJSONProvided();
     }
     var obj = JSON.parse(source);
-    return mapResult(aslValidator(obj));
+    var sourceMap = parseSourceMap(source);
+    return mapResult(aslValidator(obj), sourceMap);
   }
 }

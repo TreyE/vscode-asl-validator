@@ -1,6 +1,7 @@
-import { ValidatorError, BadStateReference, ValidatorResult } from "./asl_validator/validator_types";
+import { ValidatorError, BadStateReference, ValidatorResult } from "./asl_validator/validator";
 import { ErrorObject } from 'ajv';
-import { Position, Range } from "vscode";
+import { Range, Position } from "vscode";
+import { JSONSourceParseResult } from 'json-source-map';
 
 export interface ValidationError {
   error: string;
@@ -26,16 +27,15 @@ function convertObject(valError : ValidatorError) : valError is object {
 }
 
 function extractErrorMessageFromSchemaFailure(valError : ErrorObject) : String {
-  console.log(valError);
   return valError.message || "";
 }
 
-function mapError(valError : ValidatorError) : object {
+function mapError(valError : ValidatorError, sourceMap : JSONSourceParseResult) : object {
   if (convertErrorObject(valError)) {
     return <ValidationError>{
-      error: valError.schemaPath,
+      error: valError.dataPath,
       message: extractErrorMessageFromSchemaFailure(valError),
-      sourceLocation: null
+      sourceLocation: sourceLocationFromSchemaError(valError, sourceMap)
     };
   } else if (convertBadStateReference(valError)) {
     return <ValidationError>{
@@ -53,43 +53,23 @@ function mapError(valError : ValidatorError) : object {
   return valError;
 }
 
-export function mapResult(valResult : ValidatorResult) : ValidationResult {
+function sourceLocationFromSchemaError(val: ErrorObject, sourceMap : JSONSourceParseResult) : Range | null {
+  var errorPath = val.dataPath;
+  var range = sourceMap.pointers[errorPath];
+  if (range) {
+    return new Range(
+      new Position(range.value.line, range.value.column),
+      new Position(range.valueEnd.line, range.valueEnd.column)
+    )
+  }
+  return null;
+}
+
+export function mapResult(valResult : ValidatorResult, sourceMap : JSONSourceParseResult) : ValidationResult {
   return <ValidationResult>{
     isValid: valResult.isValid,
-    errors: valResult.errors.map(mapError)
+    errors: valResult.errors.map((valErr) => mapError(valErr, sourceMap))
   };
-}
-
-interface HasSourceLocation {
-  lineNumber: number;
-  columnNumber: number;
-}
-
-function checkSyntaxErrorHasLocation(e : any) : e is HasSourceLocation {
-  return true;
-}
-
-export function mapSyntaxError(e: any) {
-  if (e instanceof SyntaxError) {
-    var lineNumber = 1;
-    var colNumber = 1;
-    if (checkSyntaxErrorHasLocation(e)) {
-      lineNumber = e.lineNumber;
-      colNumber = e.lineNumber;
-    }
-    return <ValidationResult>({
-      isValid: false,
-      errors: [ 
-        <ValidationError>{
-          error: e.name,
-          message: e.message,
-          sourceLocation: new Range(new Position(lineNumber, colNumber), new Position(lineNumber, colNumber))
-        }
-      ]
-    });
-  } else {
-    throw e;
-  }
 }
 
 export function mapNoJSONProvided() {
