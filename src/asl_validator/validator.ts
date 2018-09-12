@@ -59,8 +59,8 @@ function checkJsonPath(definition : any) : object[] {
 }
 
 export interface BadStateReference {
-  'Error code': String,
-  Message : String
+  'Error code': string,
+  Message : string
 }
 
 export type ValidatorError = ErrorObject | BadStateReference | object;

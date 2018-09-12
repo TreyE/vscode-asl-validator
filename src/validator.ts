@@ -1,5 +1,5 @@
 import { validator as aslValidator } from "./asl_validator/validator";
-import { mapNoJSONProvided, ValidationResult, mapResult } from './validation_errors';
+import { mapNoJSONProvided, ValidationResult, mapResult } from './validations/validation_result';
 import { parse as parseSourceMap } from "json-source-map"
 
 export class Validator {

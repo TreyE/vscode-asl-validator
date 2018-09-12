@@ -40,7 +40,7 @@ export class TextDocumentAdapter implements JSONTextDocument {
   }
 }
 
-export  function mapJsonDiagnostic(diag: JSONDiagnostic) : vscode.Diagnostic {
+export function mapJsonDiagnostic(diag: JSONDiagnostic) : vscode.Diagnostic {
   var new_range = mapRange(diag.range);
   var new_diagnostic = new vscode.Diagnostic(
     new_range,

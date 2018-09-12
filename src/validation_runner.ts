@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
 import { Validator } from './validator';
-import { ValidationResult, ValidationError } from "./validation_errors";
+import { ValidationResult } from "./validations/validation_result";
+import { diagnosticFromValidationError, uniqueValidationErrors } from "./validations/validation_error";
 import { getLanguageService, LanguageServiceParams } from "vscode-json-languageservice";
 import { TextDocumentAdapter, mapJsonDiagnostic } from './json_language_service/service_adapters'
-import { uniqWith } from "lodash";
 
 const languageServiceConfig : LanguageServiceParams = {
 };
@@ -18,16 +18,21 @@ export class ValidationRunner {
         if (results.isValid) {
           vscode.window.showInformationMessage("Valid Workflow");
         } else {
+          var dc = vscode.languages.createDiagnosticCollection("Invalid Workflow");
+          dc.set(document.uri,
+            uniqueValidationErrors(results.errors).map((ve) => {
+              return diagnosticFromValidationError(ve)
+            })
+          )
           vscode.window.showErrorMessage("Invalid Workflow", "Click for details").then(
             (selection) => {
               if (selection == "Click for details") {
-                ValidationRunner.createDiagnostics(document.uri, results);
+                vscode.commands.executeCommand("workbench.action.problems.focus");
               }
             }
           )
         }
       } catch (e) {
-        vscode.commands.executeCommand("workbench.action.problems.focus").then(() => {
           var lang_serv = getLanguageService(languageServiceConfig);
           lang_serv.doValidation(new TextDocumentAdapter(document), lang_serv.parseJSONDocument(new TextDocumentAdapter(document))).then(
             (diagnostics) => {
@@ -39,6 +44,13 @@ export class ValidationRunner {
               } else {
                 console.log("diagnostics was empty");
               }
+              vscode.window.showErrorMessage("Invalid Workflow", "Click for details").then(
+                (selection) => {
+                  if (selection == "Click for details") {
+                    vscode.commands.executeCommand("workbench.action.problems.focus");
+                  }
+                }
+              )
             },
           (err: any) => { 
             console.log(err.toString());
@@ -46,51 +58,8 @@ export class ValidationRunner {
               console.log(err.stack);
             }
           }
-          
           );
-        });
       }
-    }
-  }
-
-  private static createDiagnostics(uri: vscode.Uri, results: ValidationResult) {
-    vscode.commands.executeCommand("workbench.action.problems.focus").then(() => {
-      var dc = vscode.languages.createDiagnosticCollection("Invalid Workflow");
-      dc.set(uri,
-        ValidationRunner.filterValidationErrors(results.errors).map((ve) => {
-          return ValidationRunner.diagnosticFromValidationError(ve)
-        })
-      )
-    });
-  }
-
-  private static diagnosticFromValidationError(err: ValidationError) {
-    var codeRange = err.sourceLocation || new vscode.Range(new vscode.Position(0,0), new vscode.Position(0,0));
-    var diag = new vscode.Diagnostic(
-      codeRange,
-      err.message,
-      vscode.DiagnosticSeverity.Error
-    );
-    diag.code = err.error;
-    return diag;
-  }
-
-  private static filterValidationErrors(inErrs: Array<ValidationError>) : Array<ValidationError> {
-    return uniqWith(inErrs, ValidationRunner.compareValidationErrors);
-  }
-
-  private static compareValidationErrors(currentVE : ValidationError, otherVE: ValidationError) : boolean {
-    if (!(currentVE.message === otherVE.message)) {
-      return false;
-    }
-    if (currentVE.sourceLocation) {
-      if (otherVE.sourceLocation) {
-        return currentVE.sourceLocation.isEqual(otherVE.sourceLocation);
-      } else {
-        return false;
-      }
-    } else {
-      return !!otherVE.sourceLocation;
     }
   }
 }
