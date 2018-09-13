@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import { Validator } from './validator';
-import { ValidationResult } from "./validations/validation_result";
 import { diagnosticFromValidationError, uniqueValidationErrors } from "./validations/validation_error";
 import { getLanguageService, LanguageServiceParams } from "vscode-json-languageservice";
 import { TextDocumentAdapter, mapJsonDiagnostic } from './json_language_service/service_adapters'
