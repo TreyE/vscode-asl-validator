@@ -17,7 +17,9 @@ The validation can be run on the current editor by keybinding/running:
 
 Not enough credit can go to [AirWare](https://www.airware.com/) for [asl-validator](https://github.com/airware/asl-validator).  Basically all I did was transform the schemas and validations to TypeScript.
 
-Additionally, credit belongs to Microsoft for making available the [JSON Language Service](https://github.com/Microsoft/vscode-json-languageservice) as an independent package.
+Big thanks also to [epoberezkin](https://github.com/epoberezkin) for [json-source-map](https://github.com/epoberezkin/json-source-map).  This powers the JSON Pointer to source-code lookup.
+
+Finally, credit belongs to Microsoft for making available the [JSON Language Service](https://github.com/Microsoft/vscode-json-languageservice) as an independent package.
 
 ## Known Issues
 
