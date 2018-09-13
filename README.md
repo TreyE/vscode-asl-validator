@@ -1,34 +1,30 @@
 # vscode-asl-validator
 
-Validate AWS Step Function Workflows from the editor.
+Validate AWS Step Function State Machines.
+
+Based on [asl-validator](https://github.com/airware/asl-validator) by AirWare (https://www.airware.com/).
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Perform validation of your AWS Step Function State Machines.
 
-## Requirements
+## Commands
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+The validation can be run on the current editor by keybinding/running:
+> extension.vscode-asl-validator.validate
 
-## Extension Settings
+## Acknowledgements
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Not enough credit can go to [AirWare](https://www.airware.com/) for [asl-validator](https://github.com/airware/asl-validator).  Basically all I did was transform the schemas and validations to TypeScript.
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+Additionally, credit belongs to Microsoft for making available the [JSON Language Service](https://github.com/Microsoft/vscode-json-languageservice) as an independent package.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+The messages produced from schema failures only include the error itself.  The messages are a little difficult to read.  I'm working on making the errors returned by Ajv display details in an easier to understand format.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 0.1.0
 
-Initial release of ...
+Initial release.

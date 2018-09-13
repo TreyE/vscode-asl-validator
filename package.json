@@ -17,19 +17,11 @@
     "contributes": {
         "commands": [
             {
-                "command": "extension.vscode-asl-validator",
+                "command": "extension.vscode-asl-validator.validate",
                 "title": "Validate AWS Step Function Workflow",
                 "category": "Editor"
             }
-        ],
-        "menus": {
-            "editor/context": [
-                {
-                    "when": "resourceLangId == json",
-                    "command": "extension.vscode-asl-validator"
-                }
-            ]
-        }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
