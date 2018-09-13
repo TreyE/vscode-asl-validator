@@ -63,7 +63,20 @@ class SchemaFailureError implements ValidationError {
   }
 
   private extractErrorMessageFromSchemaFailure(valError : ErrorObject) : string {
-    return valError.message || "";
+    var messageVal = valError.message || "";
+    if (valError.propertyName) {
+      return `${valError.propertyName}, ${valError.keyword} - ${messageVal}`;  
+    } else if (valError.data) {
+      return `${this.extractDataPath(valError)} - ${valError.data} - ${messageVal}`;
+    }
+    return `${this.extractDataPath(valError)} - ${messageVal}`;
+  }
+
+  private extractDataPath(valError : ErrorObject) : String {
+    if (valError.dataPath === "") {
+      return "/";
+    }
+    return valError.dataPath;
   }
 
   private sourceLocationFromSchemaError(val: ErrorObject, sourceMap : JSONSourceParseResult) : Range | null {
@@ -80,11 +93,11 @@ class SchemaFailureError implements ValidationError {
 }
 
 function convertErrorObject(valError : ValidatorError) : valError is ErrorObject {
-  return true;
+  return (<ErrorObject>valError).dataPath !== undefined;
 }
 
 function convertBadStateReference(valError : ValidatorError) : valError is BadStateReference {
-  return true;
+  return (<BadStateReference>valError).Message !== undefined;
 }
 
 export function mapError(valError : ValidatorError, sourceMap : JSONSourceParseResult) : object {

@@ -1,4 +1,4 @@
-export const state_machine = {
+export const state_machine : object = {
   "$id": "http://asl-validator.cloud/state-machine#",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",

@@ -83,7 +83,8 @@ export function validator(definition : object) : ValidatorResult {
       task,
       wait
     ],
-    jsonPointers: true
+    jsonPointers: true,
+    allErrors: true
   });
 
   // Validating JSON paths

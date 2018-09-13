@@ -15,23 +15,23 @@ import * as vscode from 'vscode';
 suite("Extension Tests", function () {
 
 	test("Activate the extension and ensure the command it is registered", function() {
-	    var extension = vscode.extensions.getExtension("TreyE.vscode-asl-validator");
+	    var extension = vscode.extensions.getExtension("TreyECode.vscode-asl-validator");
 	    if (extension) {
 		    extension.activate().then( () => {
-			    vscode.commands.getCommands().then((commands) => { assert(commands.indexOf("extension.vscode-asl-validator") > -1) });
+			    vscode.commands.getCommands().then((commands) => { assert(commands.indexOf("extension.vscode-asl-validator.validate") > -1) });
 		    });
 	    }
     });
 
     test("Activate the extension and run it against a newly-open editor", async function() {
-	    var extension = vscode.extensions.getExtension("TreyE.vscode-asl-validator");
+	    var extension = vscode.extensions.getExtension("TreyECode.vscode-asl-validator");
 	    assert(extension);
 	    if (extension) {
 				await extension.activate();
 				var doc = await vscode.workspace.openTextDocument();
 				await vscode.window.showTextDocument(doc);
 				assert(vscode.window.activeTextEditor);
-				await vscode.commands.executeCommand("extension.vscode-asl-validator");
+				await vscode.commands.executeCommand("extension.vscode-asl-validator.validate");
 			}
 		});
 });

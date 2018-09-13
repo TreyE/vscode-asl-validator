@@ -8,7 +8,7 @@ const languageServiceConfig : LanguageServiceParams = {
 };
 
 export class ValidationRunner {
-  static runValidations() {
+  static runValidations(diagnosticCollection : vscode.DiagnosticCollection) {
     if (vscode.window.activeTextEditor) {
       var document = vscode.window.activeTextEditor.document;
       var fileText = document.getText();
@@ -17,8 +17,7 @@ export class ValidationRunner {
         if (results.isValid) {
           vscode.window.showInformationMessage("Valid Workflow");
         } else {
-          var dc = vscode.languages.createDiagnosticCollection("Invalid Workflow");
-          dc.set(document.uri,
+          diagnosticCollection.set(document.uri,
             uniqueValidationErrors(results.errors).map((ve) => {
               return diagnosticFromValidationError(ve)
             })
@@ -35,9 +34,8 @@ export class ValidationRunner {
           var lang_serv = getLanguageService(languageServiceConfig);
           lang_serv.doValidation(new TextDocumentAdapter(document), lang_serv.parseJSONDocument(new TextDocumentAdapter(document))).then(
             (diagnostics) => {
-              var dc = vscode.languages.createDiagnosticCollection("Invalid Workflow");
               if (diagnostics) {
-                dc.set(document.uri,
+                diagnosticCollection.set(document.uri,
                   diagnostics.map(mapJsonDiagnostic)
                 )
               } else {

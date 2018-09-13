@@ -28,9 +28,7 @@ export const parallel = {
     "Branches": {
       "type": "array",
       "items": {
-        "types": {
           "$ref": "http://asl-validator.cloud/state-machine#"
-        }
       }
     },
     "Retry": {

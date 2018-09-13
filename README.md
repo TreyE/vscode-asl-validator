@@ -21,11 +21,12 @@ Big thanks also to [epoberezkin](https://github.com/epoberezkin) for [json-sourc
 
 Finally, credit belongs to Microsoft for making available the [JSON Language Service](https://github.com/Microsoft/vscode-json-languageservice) as an independent package.
 
-## Known Issues
-
-The messages produced from schema failures only include the error itself.  The messages are a little difficult to read.  I'm working on making the errors returned by Ajv display details in an easier to understand format.
-
 ## Release Notes
+
+### 0.1.1
+
+Clean up Problems on each validation run.
+Better vaildation failure messages.
 
 ### 0.1.0
 
