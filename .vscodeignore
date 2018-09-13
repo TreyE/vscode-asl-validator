@@ -3,7 +3,9 @@
 out/test/**
 out/**/*.map
 src/**
+.vstoken
 .gitignore
 tsconfig.json
 vsc-extension-quickstart.md
 tslint.json
+
