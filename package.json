@@ -2,7 +2,7 @@
     "name": "vscode-asl-validator",
     "displayName": "Amazon Step Function Workflow Validator",
     "description": "Validate AWS Step Function State Machines.",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "publisher": "TreyECode",
     "repository": "https://github.com/TreyE/vscode-asl-validator",
     "license": "MIT",
@@ -22,7 +22,7 @@
     "activationEvents": [
         "onLanguage:json"
     ],
-    "main": "./out/extension",
+    "main": "./out/extension.js",
     "contributes": {
         "commands": [
             {
@@ -33,27 +33,30 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
+        "pack" : "rm -Rf ./dist && rm -Rf ./out && ./node_modules/.bin/tsc -p tsconfig.package.json && ./node_modules/.bin/webpack --config webpack.config.js",
+        "vscode:prepublish": "npm run pack",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
+        "debug": "npm run pack",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
-    "dependencies": {
-        "asl-validator": "1.1.1",
-        "vscode-json-languageservice": "^3.1.6",
-        "vscode-languageserver-types": "^3.12.0",
-        "json-source-map": "0.4.0",
-        "ajv": "^6.5.1",
-        "jsonpath": "^1.0.0",
-        "lodash": "^4.14.116"
-    },
+    "dependencies": {},
     "devDependencies": {
+        "@types/lodash": "^4.14.116",
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^8.10.25",
+        "ajv": "^6.5.1",
+        "asl-validator": "1.1.1",
+        "json-source-map": "0.4.0",
+        "jsonpath": "^1.0.0",
+        "lodash": "^4.14.116",
+        "tslint": "^5.8.0",
         "typescript": "^2.6.1",
         "vscode": "^1.1.21",
-        "tslint": "^5.8.0",
-        "@types/node": "^8.10.25",
-        "@types/mocha": "^2.2.42",
-        "@types/lodash": "^4.14.116"
+        "vscode-json-languageservice": "^3.1.6",
+        "vscode-languageserver-types": "^3.12.0",
+        "webpack": "^4.19.1",
+        "webpack-cli": "^3.1.0"
     }
 }
