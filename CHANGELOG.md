@@ -1,5 +1,9 @@
 # Change Log
 
+### 0.1.3
+
+A typo in the Readme.  No seriously.
+
 ### 0.1.2
 
 Re-locate Release Notes to Changelog.

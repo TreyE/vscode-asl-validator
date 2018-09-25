@@ -2,7 +2,7 @@
     "name": "vscode-asl-validator",
     "displayName": "Amazon Step Function Workflow Validator",
     "description": "Validate AWS Step Function State Machines.",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "publisher": "TreyECode",
     "repository": "https://github.com/TreyE/vscode-asl-validator",
     "license": "MIT",
