@@ -1,5 +1,9 @@
 # Change Log
 
+### 0.1.5
+
+Icon for the package.
+
 ### 0.1.4
 
 Significant package size reduction.
