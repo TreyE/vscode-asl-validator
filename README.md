@@ -15,7 +15,7 @@ The validation can be run on the current editor by keybinding/running:
 
 ## Known Issues
 
-Package size is far too large.  I'm currently working on either a webpack build, or investigating a way to pull in less of Lodash.
+Package size is much smaller, but stil larger than I would like.
 
 ## Acknowledgements
 

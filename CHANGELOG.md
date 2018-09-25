@@ -1,5 +1,9 @@
 # Change Log
 
+### 0.1.4
+
+Significant package size reduction.
+
 ### 0.1.3
 
 A typo in the Readme.  No seriously.

@@ -2,7 +2,8 @@ import { Range, Position, Diagnostic, DiagnosticSeverity } from 'vscode';
 import { ErrorObject } from 'ajv';
 import { ValidatorError, BadStateReference } from "../asl_validator/validator";
 import { JSONSourceParseResult } from 'json-source-map';
-import { uniqWith } from "lodash";
+
+const uniqWith = require("lodash.uniqwith");
 
 export interface ValidationError {
   error: string;

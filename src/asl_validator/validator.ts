@@ -12,7 +12,7 @@ import { wait } from './schemas/wait';
 
 import { ErrorObject } from 'ajv';
 
-var jp : any = require('jsonpath');
+var jp : any = require('jsonpath/lib/index');
 
 function missingTransitionTarget(definition: any) : Array<any> {
   // retrieve all states
@@ -45,8 +45,8 @@ function missingTransitionTarget(definition: any) : Array<any> {
 };
 
 function checkJsonPath(definition : any) : object[] {
-  return jp.query(definition, '$..[\'InputPath\',\'OutputPath\',\'ResultPath\']')
-  .filter((path : any) => (typeof path === 'string'))
+  var query = jp.query(definition, '$..[\'InputPath\',\'OutputPath\',\'ResultPath\']');
+  return query.filter((path : any) => (typeof path === 'string'))
   .map((path : any) => {
     try {
       jp.parse(path);
